@@ -4,15 +4,15 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 # Load forecasted demand
-forecasted_df = pd.read_csv("data/processed/forecasted_energy.csv")
+forecasted_df = pd.read_csv("data/processed/updated_forecasted_energy.csv")
 predicted_load = forecasted_df["predicted_load"].values
 
 # Load PSO results
-pso_df = pd.read_csv("data/processed/optimized_energy_distribution.csv")
+pso_df = pd.read_csv("data/processed/optimized_pso.csv")
 pso_energy = pso_df["optimized_energy"].values
 
 # Load ACO results
-aco_df = pd.read_csv("data/processed/optimized_energy.csv")
+aco_df = pd.read_csv("data/processed/optimized_aco.csv")
 aco_energy = aco_df["optimized_energy"].values
 
 # Compute error metrics
@@ -21,7 +21,7 @@ def evaluate_performance(true_values, predicted_values, method):
     rmse = np.sqrt(mean_squared_error(true_values, predicted_values))
     variance = np.var(predicted_values)
     
-    print(f"📊 {method} Optimization Results:")
+    print(f"{method} Optimization Results:")
     print(f"   - MAE: {mae:.2f}")
     print(f"   - RMSE: {rmse:.2f}")
     print(f"   - Variance: {variance:.2f}")
@@ -33,7 +33,7 @@ def evaluate_performance(true_values, predicted_values, method):
 pso_metrics = evaluate_performance(predicted_load, pso_energy, "PSO")
 aco_metrics = evaluate_performance(predicted_load, aco_energy, "ACO")
 
-# 📊 Visualization
+# Visualization
 plt.figure(figsize=(10, 5))
 plt.plot(predicted_load, label="Forecasted Demand", color="black", linestyle="dashed")
 plt.plot(pso_energy, label="PSO Optimized", color="blue")

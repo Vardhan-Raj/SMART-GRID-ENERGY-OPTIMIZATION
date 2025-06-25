@@ -4,7 +4,7 @@ from pyswarm import pso
 
 # Load forecasted energy demand
 def load_forecasted_data():
-    file_path = "data/processed/forecasted_energy.csv"
+    file_path = "data/processed/updated_forecasted_energy.csv"
     df = pd.read_csv(file_path)
     return df["predicted_load"].values  # Ensure correct column name
 
@@ -12,17 +12,14 @@ def load_forecasted_data():
 def cost_function(energy_distribution, *args):
     demand = args[0]  # Actual forecasted demand
 
-    # Total difference between allocated energy and demand
-    total_imbalance = np.abs(np.sum(energy_distribution) - np.sum(demand))
+    total_imbalance = np.abs(np.sum(energy_distribution) - np.sum(demand)) # Total difference between allocated energy and demand
 
     # Penalizing grids that receive too much or too little energy
     distribution_penalty = np.sum(np.abs(energy_distribution - demand[:len(energy_distribution)]))
 
-    # Penalizing variance to encourage fair distribution
-    variance_penalty = 5 * np.std(energy_distribution)
+    variance_penalty = 5 * np.std(energy_distribution) # Penalizing variance to encourage fair distribution
 
-    # Total cost function
-    return total_imbalance + variance_penalty + distribution_penalty
+    return total_imbalance + variance_penalty + distribution_penalty # Total cost function
 
 # Optimize energy distribution using PSO
 def optimize_energy_distribution():
@@ -41,9 +38,9 @@ def optimize_energy_distribution():
         "grid_id": range(1, num_grids + 1),
         "optimized_energy": optimized_distribution
     })
-    df.to_csv("data/processed/optimized_energy_distribution.csv", index=False)
+    df.to_csv("data/processed/optimized_pso.csv", index=False)
 
-    print("\n✅ PSO Optimization Completed. Results saved at 'data/processed/optimized_energy_distribution.csv'.")
+    print("\nPSO Optimization Completed. Results saved at 'data/processed/optimized_pso.csv'.")
     print(df.head())
 
 # Run optimization
